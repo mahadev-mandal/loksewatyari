@@ -6,6 +6,7 @@ const questionSchema = new mongoose.Schema({
         required: true,
         unique: true,
         index: true,
+        trim:true,
     },
     questionId:{
         type:Number,
@@ -40,24 +41,6 @@ const questionSchema = new mongoose.Schema({
     branch: Array,
     MCQ: Boolean,
     GK: Boolean,
-    likes: [
-        {
-            userId: String,
-            count: {
-                type: Number,
-                default: 0
-            }
-        }
-    ],
-    disLikes: [
-        {
-            userId: String,
-            count: {
-                type: Number,
-                default: 0
-            }
-        }
-    ],
 })
 
 export default mongoose.models.question || mongoose.model('question', questionSchema);

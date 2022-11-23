@@ -1,6 +1,6 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 
-const likeDisliskeCommentSchema = new mongoose.Schema({
+const questionDetails = new mongoose.Schema({
     questionId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -43,7 +43,8 @@ const likeDisliskeCommentSchema = new mongoose.Schema({
             comment: String
         }
     ],
+    views:Number
 
 })
 
-export default mongoose.model.likeDisliskeComment || mongoose.model('likeDislikeComment', likeDisliskeCommentSchema)
+export default mongoose.model.questionDetails || mongoose.model('questionDetails', questionDetails)

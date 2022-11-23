@@ -24,3 +24,7 @@ a {
     background: black;
   }
 }
+
+.container {
+  padding: 10px 50px;
+}
