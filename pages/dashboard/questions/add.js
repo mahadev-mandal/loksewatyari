@@ -1,7 +1,8 @@
 import { styled } from '@mui/material/styles';
-import { Box, Stack, TextField } from '@mui/material'
-import React from 'react'
+import { Box, Checkbox, IconButton, InputLabel, Paper, Stack, TextField } from '@mui/material'
+import React, { useState } from 'react'
 import MiniDrawer from '../../../components/Drawer/MiniDrawer'
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const fieldsArray = [
     {
@@ -14,7 +15,7 @@ const fieldsArray = [
     },
     {
         label: 'correctOption',
-        type: Number,
+        type: 'number',
     },
     {
         label: 'description',
@@ -49,6 +50,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 function AddQuestion() {
+
     return (
         <Box sx={{ display: 'flex' }}>
             <MiniDrawer />
@@ -69,10 +71,58 @@ function AddQuestion() {
                             autoComplete="off"
                         />
                     ))}
+                    <Option />
                 </Stack>
             </Box>
+
         </Box>
     )
 }
 
 export default AddQuestion
+
+const Option = () => {
+    const [options, setOptions] = useState(['']);
+    const [correctOption, setCorrectOption] = useState(null);
+    const handleChange = (e, i) => {
+        options[i] = e.target.value;
+        setOptions([...options])
+    }
+    const handleRemove = (i) => {
+        options.splice(i, 1);
+        if (correctOption > i) {
+            setCorrectOption(correctOption - 1);
+        } else if (correctOption == i && options.length > 1) {
+            options.splice(i, 1);
+            setCorrectOption(null)
+        }
+        setOptions([...options])
+    }
+
+    return (
+        <Paper elevation={2}>
+            <InputLabel sx={{ ml: 1 }}>Options</InputLabel>
+            <Stack spacing={0.5}>
+                {options.map((a, i) => (
+                    <TextField
+                        key={i}
+                        onKeyPress={(e) => e.key == 'Enter' && setOptions([...options, ''])}
+                        onChange={e => handleChange(e, i)}
+                        autoFocus
+                        id="standard-start-adornment"
+                        fullWidth
+                        value={options[i]}
+                        InputProps={{
+                            startAdornment: <Checkbox checked={correctOption == i} onChange={() => setCorrectOption(i)} />,
+                            endAdornment: <IconButton color="error" onClick={() => handleRemove(i)}>
+                                <CancelIcon />
+                            </IconButton>
+                        }}
+                        variant="standard"
+                    />
+                ))}
+            </Stack>
+        </Paper>
+
+    )
+}
