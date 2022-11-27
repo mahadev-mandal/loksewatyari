@@ -36,11 +36,6 @@ const questionSchema = new mongoose.Schema({
         unique: true,
         index: true
     },
-    levels: Array,
-    subjects: Array,
-    branch: Array,
-    MCQ: Boolean,
-    GK: Boolean,
 })
 
 export default mongoose.models.question || mongoose.model('question', questionSchema);

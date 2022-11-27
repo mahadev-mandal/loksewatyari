@@ -16,8 +16,6 @@ const employeeSchema = new mongoose.Schema({
     },
     mobile: {
         type: String,
-        required: true,
-        unique: true,
     },
     email: {
         type: String,
@@ -71,10 +69,9 @@ employeeSchema.methods.generateAuthToken = async function (req, res) {
     try {
         let token = jwt.sign({
             _id: this._id,
-            dealAyoId: this.dealAyoId,
+            userId: this.userId,
             name: this.firstName,
             role: this.role,
-            profilePicPath: this.profilePicPath
         },
             process.env.SECRET_KEY
         );
