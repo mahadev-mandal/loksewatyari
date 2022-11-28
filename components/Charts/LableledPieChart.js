@@ -35,7 +35,7 @@ export const data = {
 
 export function LabeledPieChart() {
   return (
-    <Paper elevation={2}>
+    <Paper elevation={2} sx={{ maxWidth: 250 }}>
       <Pie data={data} />
       <FilterByDate />
     </Paper>

@@ -63,7 +63,7 @@ export const data = {
 
 export function SimpleBarChart() {
   return (
-    <Paper sx={{ width: 500 }} elevation={2}>
+    <Paper sx={{ width: '100%' }} elevation={2}>
       <Bar options={options} data={data} />
       <FilterByDate />
     </Paper>

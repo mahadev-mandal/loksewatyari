@@ -15,13 +15,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import { Stack } from '@mui/material';
+import { Badge, Stack } from '@mui/material';
 import BadgeAvatars from './BadgeAvatar';
 import { adminMenu } from '../../helpers/constants';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import AppsIcon from '@mui/icons-material/Apps';
+import LogoutTooltip from '../Tooltip/LogoutTooltip';
 
 const drawerWidth = 240;
 
@@ -119,31 +120,61 @@ function MiniDrawer() {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: '100%', }} >
+                    <Stack
+                        direction="row"
+                        alignItems="center"
+                        justifyContent="space-between"
+                        sx={{ width: '100%', }}
+                    >
                         <Typography variant="h6" noWrap component="div">
                             Admin Panel
                         </Typography>
-                        <BadgeAvatars />
+                        <Stack direction="row" spacing={1}>
+                            <IconButton sx={{ color: 'white' }}>
+                                <AppsIcon />
+                            </IconButton>
+                            <IconButton color="warning">
+                                <Badge
+                                    variant="dot"
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'left',
+                                    }} color="error"
+                                >
+                                    <NotificationsIcon />
+                                </Badge>
+                            </IconButton>
+                            <LogoutTooltip />
+                        </Stack>
                     </Stack>
                 </Toolbar>
             </AppBar>
-            <Drawer variant="permanent" open={open}>
+            <Drawer variant="permanent" open={open} >
                 <DrawerHeader>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                     </IconButton>
                 </DrawerHeader>
                 <Divider />
-                <List component="nav">
+                <List component="nav" sx={{ background: 'rgb(25,118,210)', height: '100%' }}>
                     {adminMenu.map((menu) => (
                         <Link href={menu.link} key={menu.title}>
-                            <ListItem disablePadding sx={{ display: 'block', }} >
+                            <ListItem disablePadding sx={{ display: 'block', '& *': { color: 'white' } }} >
                                 <ListItemButton
                                     selected={router.pathname == menu.link}
                                     sx={{
                                         minHeight: 48,
                                         justifyContent: open ? 'initial' : 'center',
                                         px: 2.5,
+                                        '&.Mui-selected': {
+                                            backgroundColor: 'rgba(110, 235, 228,1)'
+                                        },
+                                        '&.Mui-focusVisible': {
+                                            backgroundColor: 'red'
+                                        },
+                                        '&:hover': {
+                                            backgroundColor: 'rgba(110, 235, 228,0.5)'
+                                        }
                                     }}
                                 >
                                     <ListItemIcon
@@ -159,31 +190,6 @@ function MiniDrawer() {
                                 </ListItemButton>
                             </ListItem>
                         </Link>
-                    ))}
-                </List>
-                <Divider />
-                <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
                     ))}
                 </List>
             </Drawer>

@@ -35,9 +35,9 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 export default function BadgeAvatars() {
-  const name= 'Mahadev mandal'
+  const name = 'Mahadev mandal'
   return (
-    <Stack direction="row" alignItems="center" spacing={0.2} sx={{ background: 'green',p:1 }}>
+    <Stack direction="row" alignItems="center" spacing={0.2}>
       <StyledBadge
         overlap="circular"
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
@@ -45,8 +45,8 @@ export default function BadgeAvatars() {
       >
         <Avatar alt="Remy Sharp" src="/images/mahadev.jpeg" sx={{ width: 35, height: 35, }} />
       </StyledBadge>
-      <Typography sx={{ display: { xs: 'none',md:'block' } }} variant='body1'>{name.substring(0,8)}</Typography>
-      <ArrowDropDownIcon/>
+      <Typography sx={{ display: { xs: 'none', md: 'block' } }} variant='body1'>{name.substring(0, 8)}</Typography>
+      <ArrowDropDownIcon />
     </Stack>
   );
 }
