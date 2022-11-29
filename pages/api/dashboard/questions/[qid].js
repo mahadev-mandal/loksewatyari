@@ -1,4 +1,6 @@
+import db_conn from '../../../../helpers/db_conn';
 import questionModel from '../../../../models/questionSchema';
+db_conn();
 
 export default function question(req, res) {
     switch (req.method) {

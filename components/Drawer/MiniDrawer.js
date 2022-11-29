@@ -16,7 +16,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { Badge, Stack } from '@mui/material';
-import BadgeAvatars from './BadgeAvatar';
 import { adminMenu } from '../../helpers/constants';
 import Link from 'next/link';
 import { useRouter } from 'next/router';

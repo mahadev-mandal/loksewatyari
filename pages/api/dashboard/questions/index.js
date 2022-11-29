@@ -1,4 +1,7 @@
+import db_conn from '../../../../helpers/db_conn';
 import questionModel from '../../../../models/questionSchema';
+
+db_conn();
 
 export default function questions(req, res) {
     switch (req.method) {
@@ -20,7 +23,7 @@ const addQuestion = async (req, res) => {
             correctOption: req.body.correctOption,
             description: req.body.description,
             keywords: req.body.keywords,
-            entryBy: req.body.entryBy,
+            entryBy: 'mahadev',
             slug: req.body.slug,
         })
         await question.save();
@@ -42,13 +45,12 @@ const getQuestions = async (req, res) => {
                 }
             }
         })
-        const questions = await questionModel.find(query)
+        const data = await questionModel.find(query)
             .skip(parseInt(page) * parseInt(rowsPerPage))
             .limit(parseInt(rowsPerPage));
 
         const totalCount = await questionModel.countDocuments(query);
-
-        res.json({ questions, totalCount })
+        res.json({ data, totalCount })
 
     } catch (err) {
         console.log(err);

@@ -9,9 +9,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import PropTypes from 'prop-types'
 import { Checkbox, TablePagination } from '@mui/material';
-import { returnStyle } from '../../controllers/returnStyle';
-import copyToClipboard from '../../controllers/copyToClipboard';
-
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -104,7 +101,7 @@ export default function SimpleTable({
                     </TableHead>
                     <TableBody>
                         {data.map((row, index) => (
-                            <StyledTableRow key={row._id} style={returnStyle(row)}>
+                            <StyledTableRow key={row._id}>
                                 <StyledTableCell component="th" scope="row">
                                     {page * rowsPerPage + index + 1}
                                 </StyledTableCell>
@@ -121,10 +118,6 @@ export default function SimpleTable({
                                     !(head == '') ?
                                         <StyledTableCell
                                             key={tableHeading[i]}
-                                            sx={{
-                                                userSelect: 'all'
-                                            }}
-                                            onClick={(e) => copyToClipboard(e.target.innerText)}
                                             title={row[head]}
                                         >
                                             {returnText(row, head)}

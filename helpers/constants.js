@@ -14,4 +14,23 @@ export const adminMenu = [
     { title: 'Add User', Icon: PersonAddAlt1Icon, link: '/dashboard/users/add' },
     { title: 'Settings', Icon: SettingsIcon, link: '/dashboard/settings' },
     { title: 'Logout', Icon: LogoutIcon, link: '/dashboard/logout' },
+];
+
+export const mongoDbUri = 'mongodb://localhost:27017/lowksewaTyari';
+
+export const levelSelect = [
+    { value: 1, title: 'One' },
+    { value: 2, title: 'Two' },
+    { value: 3, title: 'Three' },
+    { value: 4, title: 'Four' },
+    { value: 5, title: 'Five' },
+    { value: 6, title: 'Six' },
+    { value: 7, title: 'Seven' }
+]
+export const subjectSelect = [
+    { value: 'electrical', title: 'Electrical' },
+    { value: 'math', title: 'Math' },
+    { value: 'grammar', title: 'Grammar' },
+    { value: 'english', title: 'English' },
+    { value: 'gk', title: 'GK' },
 ]

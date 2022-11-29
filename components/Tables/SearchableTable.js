@@ -23,7 +23,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
-        textAlign:'center'
+        textAlign: 'center'
     },
 }));
 
@@ -55,7 +55,7 @@ function SearchableTable({
     onKeyPress,
     inputRef
 }) {
-   
+
     const returnComp = (Comp, row, head) => <Comp row={row} head={head} />
     const allSelectChecker = () => {
         if (selected.length > 0) {
@@ -64,14 +64,6 @@ function SearchableTable({
             return false;
         }
     };
-    function toTitleCase(str) {
-        return str.replace(
-            /\w\S*/g,
-            function (txt) {
-                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-            }
-        );
-    }
 
     return (
         <>
@@ -90,7 +82,7 @@ function SearchableTable({
                                 </StyledTableCell>
                             }
                             {tableHeading.map((heading) => (
-                                <StyledTableCell sx={{textAlign:"center"}} key={heading}>{heading}</StyledTableCell>
+                                <StyledTableCell sx={{ textAlign: "center" }} key={heading}>{heading}</StyledTableCell>
                             ))}
                         </TableRow>
                     </TableHead>
@@ -98,7 +90,7 @@ function SearchableTable({
                         <StyledTableRow>
                             <StyledTableCell></StyledTableCell>
                             <StyledTableCell></StyledTableCell>
-                            {/* {tableHeading.map((d) => (
+                            {tableHeading.map((d) => (
                                 <StyledTableCell key={d}>
                                     <input
                                         onKeyPress={onKeyPress}
@@ -109,10 +101,10 @@ function SearchableTable({
                                     />
 
                                 </StyledTableCell>
-                            ))} */}
+                            ))}
                         </StyledTableRow>
                         {data.map((row, index) => (
-                            <StyledTableRow key={row._id} style={returnStyle(row)}>
+                            <StyledTableRow key={row._id}>
                                 <StyledTableCell component="th" scope="row">
                                     {page * rowsPerPage + index + 1}
                                 </StyledTableCell>
@@ -128,18 +120,8 @@ function SearchableTable({
                                 {dataHeading.map((head, i) =>
                                     !(head == '') ?
                                         <StyledTableCell
-                                            key={tableHeading[i]}
-                                            sx={{
-                                                userSelect: 'all'
-                                            }}
-                                            onClick={(e) => copyToClipboard(e.target.innerText)}
-                                        >
-                                            {typeof (row[head]) == 'string' ?
-                                                head == 'title' ?
-                                                    toTitleCase(row[head])
-                                                    : row[head]
-                                                : JSON.stringify(row[head])
-                                            }
+                                            key={tableHeading[i]}>
+                                            {row[head]}
                                         </StyledTableCell>
                                         : <StyledTableCell key={tableHeading[i]}>
                                             {returnComp(ExtraCells[tableHeading[i]], row, tableHeading[i])}
@@ -178,7 +160,7 @@ SearchableTable.propTypes = {
     onSelectChange: PropTypes.func,
     onAllSelectChange: PropTypes.func,
     onKeyPress: PropTypes.func,
-    inputRef:PropTypes.object,
+    inputRef: PropTypes.object,
 }
 
 export default SearchableTable;

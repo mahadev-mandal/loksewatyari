@@ -77,7 +77,7 @@ function LogoutTooltip() {
         setTooltipWidth(document.getElementById('badged-avatar')?.offsetWidth);
     }, [])
     return (
-        <ClickAwayListener onClickAway={() => setOpen(!open)}>
+        <ClickAwayListener onClickAway={() => setOpen(false)}>
             <Tooltip
                 open={open}
                 describeChild

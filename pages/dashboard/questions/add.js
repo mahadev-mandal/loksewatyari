@@ -4,36 +4,47 @@ import MiniDrawer from '../../../components/Drawer/MiniDrawer'
 import CancelIcon from '@mui/icons-material/Cancel';
 import MultipleSelect from '../../../components/Select/MultipleSelect';
 import DrawerHeader from '../../../components/DrawerHeader';
+import { levelSelect, subjectSelect } from '../../../helpers/constants';
+import axios from 'axios';
+import { questionValidationSchema } from '../../../utils/questionValidationSchema';
+import { mutate } from 'swr';
+import { useFormik } from 'formik';
+import OptionsDialog from '../../../components/Dialogs/OptionsDialog';
 
-
-
-const levelSelect = [
-    { value: 1, title: 'One' },
-    { value: 2, title: 'Two' },
-    { value: 3, title: 'Three' },
-    { value: 4, title: 'Four' },
-    { value: 5, title: 'Five' },
-    { value: 6, title: 'Six' },
-    { value: 7, title: 'Seven' }
-]
-const subjectSelect = [
-    { value: 'electrical', title: 'Electrical' },
-    { value: 'math', title: 'Math' },
-    { value: 'grammar', title: 'Grammar' },
-    { value: 'english', title: 'English' },
-    { value: 'gk', title: 'GK' },
-]
+const initialValues = {
+    question: '',
+    options: [''],
+    correctOption: '',
+    description: '',
+    levels: [],
+    subjects: [],
+    keywords: '',
+    slug: '',
+}
 
 function AddQuestion() {
-    const [levels, setLevels] = useState([]);
-    const [subjects, setSubjects] = useState([]);
+    const [msg, setMsg] = useState({});
+
+    const { handleSubmit, handleChange, handleBlur, touched, errors, values, setFieldValue } = useFormik({
+        initialValues: initialValues,
+        validationSchema: questionValidationSchema,
+        async onSubmit() {
+            await axios.post(`/api/dashboard/questions`, { ...values })
+                .then(() => {
+                    setMsg({ success: 'question added' });
+                    mutate(`/api/dashboard/questions`)
+                }).catch(() => {
+                    setMsg({ err: 'error occured' })
+                })
+        }
+    })
 
     const handleLevelChange = (event) => {
         const {
             target: { value },
         } = event;
-        setLevels(
-            // On autofill we get a stringified value.
+        setFieldValue(
+            'levels',
             typeof value === 'string' ? value.split(',') : value,
         );
     };
@@ -41,12 +52,32 @@ function AddQuestion() {
         const {
             target: { value },
         } = event;
-        setSubjects(
+        setFieldValue(
             // On autofill we get a stringified value.
+            'subjects',
             typeof value === 'string' ? value.split(',') : value,
         );
     };
-
+    const handleOptionsChange = (e, i) => {
+        const opt = [...values.options]
+        opt[i] = e.target.value;
+        setFieldValue(
+            'options',
+            opt
+        )
+    }
+    const handleOptionRemove = (i) => {
+        if (values.options.length > 1) {
+            setFieldValue('options', values.options.splice(i, 1))
+            if (values.correctOption > i) {
+                setFieldValue('correctOption', values.correctOption - 1)
+            } else if (values.correctOption == i && values.options.length > 1) {
+                setFieldValue('correctOption', null)
+            }
+            setFieldValue('options', [...values.options])
+        }
+    }
+    console.log(msg)
     return (
         <Box sx={{ display: 'flex' }}>
             <MiniDrawer />
@@ -64,30 +95,57 @@ function AddQuestion() {
                         label="Question"
                         id="question"
                         autoComplete="off"
+                        value={values.question}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={errors.question && touched.question ? true : false}
+                        helperText={errors.question && touched.question ? errors.question : null}
                     />
-                    <Option />
+                    <OptionsDialog />
+                    {/* <OptionsComp
+                        id="options"
+                        options={values.options}
+                        correctOption={values.correctOption}
+                        onChange={handleOptionsChange}
+                        onKeyPress={(e) => e.key == 'Enter' && setFieldValue('options', [...values.options, ''])}
+                        onCorrectOptionChange={(i) => setFieldValue('correctOption', values.options[i])}
+                        onRemove={handleOptionRemove}
+                    /> */}
                     <TextareaAutosize
                         minRows={5}
                         placeholder="Descriptions"
+                        id="description"
+                        value={values.description}
+                        onChange={handleChange}
+                        error={errors.description && touched.description ? true : false}
+                        helperText={errors.description && touched.description ? errors.description : null}
                     />
                     <MultipleSelect
                         label="Select Levels"
-                        value={levels}
-                        onChange={handleLevelChange}
                         menuItems={levelSelect}
+                        id="levels"
+                        value={values.levels}
+                        onChange={handleLevelChange}
+                        error={errors.levels && touched.levels ? true : false}
+                        helperText={errors.levels && touched.levels ? errors.levels : null}
                     />
                     <MultipleSelect
                         label="Select Subjects"
-                        value={subjects}
-                        onChange={handleSubjectChange}
                         menuItems={subjectSelect}
+                        id="subjects"
+                        value={values.subjects}
+                        onChange={handleSubjectChange}
                     />
                     <TextField
                         variant="outlined"
                         type="text"
                         label="Keywords"
-                        id="keyword"
+                        id="keywords"
                         autoComplete="off"
+                        value={values.keywords}
+                        onChange={handleChange}
+                        error={errors.keywords && touched.keywords ? true : false}
+                        helperText={errors.keywords && touched.keywords ? errors.keywords : null}
                     />
                     <TextField
                         variant="outlined"
@@ -95,8 +153,12 @@ function AddQuestion() {
                         label="Slug"
                         id="slug"
                         autoComplete="off"
+                        value={values.slug}
+                        onChange={handleChange}
+                        error={errors.slug && touched.slug ? true : false}
+                        helperText={errors.slug && touched.slug ? errors.slug : null}
                     />
-                    <Button fullWidth variant="contained">Submit</Button>
+                    <Button onClick={handleSubmit} fullWidth variant="contained">Submit</Button>
                 </Stack>
             </Box>
 
@@ -106,24 +168,7 @@ function AddQuestion() {
 
 export default AddQuestion
 
-const Option = () => {
-    const [options, setOptions] = useState(['']);
-    const [correctOption, setCorrectOption] = useState(null);
-    const handleChange = (e, i) => {
-        options[i] = e.target.value;
-        setOptions([...options])
-    }
-    const handleRemove = (i) => {
-        if (options.length > 1) {
-            options.splice(i, 1);
-            if (correctOption > i) {
-                setCorrectOption(correctOption - 1);
-            } else if (correctOption == i && options.length > 1) {
-                setCorrectOption(null)
-            }
-            setOptions([...options])
-        }
-    }
+const OptionsComp = ({ onChange, options, correctOption, onRemove, onCorrectOptionChange, onKeyPress }) => {
 
     return (
         <Paper elevation={2}>
@@ -132,15 +177,15 @@ const Option = () => {
                 {options.map((a, i) => (
                     <TextField
                         key={i}
-                        onKeyPress={(e) => e.key == 'Enter' && setOptions([...options, ''])}
-                        onChange={e => handleChange(e, i)}
+                        onKeyPress={onKeyPress}
+                        onChange={e => onChange(e, i)}
                         autoFocus
                         id="standard-start-adornment"
                         fullWidth
                         value={options[i]}
                         InputProps={{
-                            startAdornment: <Checkbox checked={correctOption == i} onChange={() => setCorrectOption(i)} />,
-                            endAdornment: <IconButton color="error" onClick={() => handleRemove(i)}>
+                            startAdornment: <Checkbox checked={correctOption == i} onChange={onCorrectOptionChange} />,
+                            endAdornment: <IconButton color="error" onClick={onRemove(i)}>
                                 <CancelIcon />
                             </IconButton>
                         }}

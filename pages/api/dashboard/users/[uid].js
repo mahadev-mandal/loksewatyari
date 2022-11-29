@@ -1,4 +1,7 @@
+import db_conn from '../../../../helpers/db_conn';
 import userModel from '../../../../models/userSchema';
+
+db_conn();
 
 export default function users(req, res) {
     switch (req.method) {
