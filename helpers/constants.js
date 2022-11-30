@@ -16,7 +16,7 @@ export const adminMenu = [
     { title: 'Logout', Icon: LogoutIcon, link: '/dashboard/logout' },
 ];
 
-export const mongoDbUri = 'mongodb://localhost:27017/lowksewaTyari';
+export const mongoDbUri = 'mongodb+srv://loksewatyari:Mahadev123@loksewatyari.np5mcm2.mongodb.net/loksewaTyari?retryWrites=true&w=majority';
 
 export const levelSelect = [
     { value: 1, title: 'One' },

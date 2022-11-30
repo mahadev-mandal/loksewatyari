@@ -1,7 +1,6 @@
-import { Box, Button, Checkbox, IconButton, InputLabel, Paper, Stack, TextareaAutosize, TextField } from '@mui/material'
+import { Box, Button, Stack, TextareaAutosize, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import MiniDrawer from '../../../components/Drawer/MiniDrawer'
-import CancelIcon from '@mui/icons-material/Cancel';
 import MultipleSelect from '../../../components/Select/MultipleSelect';
 import DrawerHeader from '../../../components/DrawerHeader';
 import { levelSelect, subjectSelect } from '../../../helpers/constants';
@@ -23,18 +22,21 @@ const initialValues = {
 }
 
 function AddQuestion() {
-    const [msg, setMsg] = useState({});
+    const [msg, setMsg] = useState('');
+    const [optionsOpen, setOptionsOpen] = React.useState(false);
 
     const { handleSubmit, handleChange, handleBlur, touched, errors, values, setFieldValue } = useFormik({
         initialValues: initialValues,
         validationSchema: questionValidationSchema,
         async onSubmit() {
+
             await axios.post(`/api/dashboard/questions`, { ...values })
-                .then(() => {
-                    setMsg({ success: 'question added' });
+                .then((r) => {
+                    console.log(r)
+                    setMsg({ title: r.data, type: 'success' });
                     mutate(`/api/dashboard/questions`)
-                }).catch(() => {
-                    setMsg({ err: 'error occured' })
+                }).catch((err) => {
+                    setMsg({ title: err.response.data, type: 'err' })
                 })
         }
     })
@@ -58,26 +60,11 @@ function AddQuestion() {
             typeof value === 'string' ? value.split(',') : value,
         );
     };
-    const handleOptionsChange = (e, i) => {
-        const opt = [...values.options]
-        opt[i] = e.target.value;
-        setFieldValue(
-            'options',
-            opt
-        )
+    const handleOptionsContinue = (options, correctOption) => {
+        setOptionsOpen(false);
+        setFieldValue('options', Object.keys(options).map(key => options[key]));
+        setFieldValue('correctOption', options[correctOption]);
     }
-    const handleOptionRemove = (i) => {
-        if (values.options.length > 1) {
-            setFieldValue('options', values.options.splice(i, 1))
-            if (values.correctOption > i) {
-                setFieldValue('correctOption', values.correctOption - 1)
-            } else if (values.correctOption == i && values.options.length > 1) {
-                setFieldValue('correctOption', null)
-            }
-            setFieldValue('options', [...values.options])
-        }
-    }
-    console.log(msg)
     return (
         <Box sx={{ display: 'flex' }}>
             <MiniDrawer />
@@ -101,16 +88,13 @@ function AddQuestion() {
                         error={errors.question && touched.question ? true : false}
                         helperText={errors.question && touched.question ? errors.question : null}
                     />
-                    <OptionsDialog />
-                    {/* <OptionsComp
-                        id="options"
-                        options={values.options}
-                        correctOption={values.correctOption}
-                        onChange={handleOptionsChange}
-                        onKeyPress={(e) => e.key == 'Enter' && setFieldValue('options', [...values.options, ''])}
-                        onCorrectOptionChange={(i) => setFieldValue('correctOption', values.options[i])}
-                        onRemove={handleOptionRemove}
-                    /> */}
+                    <OptionsDialog
+                        open={optionsOpen}
+                        onOpen={() => setOptionsOpen(true)}
+                        onClose={handleOptionsContinue}
+                        error={errors.correctOption ? true : false}
+                        helperText={errors.correctOption}
+                    />
                     <TextareaAutosize
                         minRows={5}
                         placeholder="Descriptions"
@@ -126,8 +110,6 @@ function AddQuestion() {
                         id="levels"
                         value={values.levels}
                         onChange={handleLevelChange}
-                        error={errors.levels && touched.levels ? true : false}
-                        helperText={errors.levels && touched.levels ? errors.levels : null}
                     />
                     <MultipleSelect
                         label="Select Subjects"
@@ -158,42 +140,17 @@ function AddQuestion() {
                         error={errors.slug && touched.slug ? true : false}
                         helperText={errors.slug && touched.slug ? errors.slug : null}
                     />
+                    <Typography variant='body1'
+                        sx={{ textAlign: 'center' }}
+                        color={msg.type == 'err' ? 'red' : 'green'}
+                    >
+                        {msg.title}
+                    </Typography>
                     <Button onClick={handleSubmit} fullWidth variant="contained">Submit</Button>
                 </Stack>
             </Box>
-
         </Box>
     )
 }
 
 export default AddQuestion
-
-const OptionsComp = ({ onChange, options, correctOption, onRemove, onCorrectOptionChange, onKeyPress }) => {
-
-    return (
-        <Paper elevation={2}>
-            <InputLabel sx={{ ml: 1 }}>Options</InputLabel>
-            <Stack spacing={0.5}>
-                {options.map((a, i) => (
-                    <TextField
-                        key={i}
-                        onKeyPress={onKeyPress}
-                        onChange={e => onChange(e, i)}
-                        autoFocus
-                        id="standard-start-adornment"
-                        fullWidth
-                        value={options[i]}
-                        InputProps={{
-                            startAdornment: <Checkbox checked={correctOption == i} onChange={onCorrectOptionChange} />,
-                            endAdornment: <IconButton color="error" onClick={onRemove(i)}>
-                                <CancelIcon />
-                            </IconButton>
-                        }}
-                        variant="standard"
-                    />
-                ))}
-            </Stack>
-        </Paper>
-
-    )
-}

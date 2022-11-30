@@ -4,33 +4,53 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Checkbox, IconButton, TextField } from '@mui/material';
-import CancelIcon from '@mui/icons-material/Cancel';
+import { Box, Checkbox, Chip, Divider, FormControl, FormHelperText, InputLabel, Select, TextField } from '@mui/material';
+import PropTypes from 'prop-types';
 
-export default function OptionsDialog() {
-    const [open, setOpen] = React.useState(false);
-    const [options, setOptions] = React.useState(['', '', '', '']);
+export default function OptionsDialog({ open, onClose, onOpen, helperText, error }) {
+    const [options, setOptions] = React.useState({ a: '', b: '', c: '', d: '' });
+    const [correctOption, setCorrectOption] = React.useState(null);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const handleOptionsChange = (e, index) => {
-        console.log(e.target.value,index)
+    const handleOptionsChange = (e, key) => {
+        options[key] = e.target.value
+        setOptions({ ...options, })
     }
-    console.log(options)
+    const handleCorrectOptionChange = (e, key) => {
+        if (!e.checked) {
+            if (options[key]) {
+                setCorrectOption(key)
+            }
+        }
+    }
     return (
         <div>
-            <Button variant="outlined" onClick={handleClickOpen}>
-                Open alert dialog
-            </Button>
+            <FormControl fullWidth >
+                <InputLabel id="demo-multiple-chip-label">Options</InputLabel>
+                <Select open={false}
+                    value={Object.keys(options).map((key) => options[key])}
+                    onMouseDown={onOpen}
+                    multiple
+                    label="Options"
+                    error={error}
+                    helperText="mahadev"
+                    renderValue={(selected) => (
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                            {selected.map((value) => (
+                                value && <Chip
+                                    color={options[correctOption] == value ? 'success' : 'error'}
+                                    key={value} label={value}
+                                />
+                            ))}
+                        </Box>
+                    )}
+                    fullWidth>
+                </Select>
+                <FormHelperText error={error} id="country-helper" disabled >
+                    {helperText}
+                </FormHelperText>
+            </FormControl>
             <Dialog
                 open={open}
-                onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
@@ -38,32 +58,43 @@ export default function OptionsDialog() {
                     {"Add all options and select correct one."}
                 </DialogTitle>
                 <DialogContent>
-                    {options.map((option, index) => (
+                    {Object.keys(options).map((key) => (
                         <TextField
-                            key={option}
-                            // onKeyPress={onKeyPress}
+                            key={key}
                             id="standard-start-adornment"
                             fullWidth
                             sx={{ minWidth: 400, mt: 1 }}
-                            value={options[index]}
-                            onChange={e => handleOptionsChange(e, index)}
+                            value={options[key]}
+                            onChange={e => handleOptionsChange(e, key)}
                             InputProps={{
-                                startAdornment: <Checkbox />,
-                                endAdornment: <IconButton color="error">
-                                    <CancelIcon />
-                                </IconButton>
+                                startAdornment: <Checkbox
+                                    onChange={e => handleCorrectOptionChange(e, key)}
+                                    checked={key == correctOption}
+                                />,
+                                // endAdornment: <IconButton color="error">
+                                //     <CancelIcon />
+                                // </IconButton>
                             }}
                             variant="outlined"
                         />
                     ))}
                 </DialogContent>
+                <Divider />
                 <DialogActions>
-                    <Button color="warning" onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleClose} autoFocus>
+                    {/* <Button color="warning" onClick={handleClose}>Cancel</Button> */}
+                    <Button onClick={() => onClose(options, correctOption)} autoFocus>
                         Continue
                     </Button>
                 </DialogActions>
             </Dialog>
         </div>
     );
+}
+
+OptionsDialog.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func,
+    onOpen: PropTypes.func,
+    error: PropTypes.bool,
+    helperText: PropTypes.string,
 }

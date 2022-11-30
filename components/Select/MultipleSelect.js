@@ -14,7 +14,6 @@ const MenuProps = {
 };
 
 function MultipleSelect({ label, value, onChange, menuItems }) {
-console.log('select render')
     return (
         <>
             <FormControl fullWidth>

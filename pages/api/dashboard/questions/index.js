@@ -16,10 +16,11 @@ export default function questions(req, res) {
 
 const addQuestion = async (req, res) => {
     try {
+        const lastDoc = await questionModel.findOne().sort({ _id: -1 });
         const question = new questionModel({
             question: req.body.question,
-            questionId: 0,
-            options: req.body.options,
+            questionId: lastDoc.questionId + 1,
+            options: 'jkdj',
             correctOption: req.body.correctOption,
             description: req.body.description,
             keywords: req.body.keywords,
@@ -29,8 +30,13 @@ const addQuestion = async (req, res) => {
         await question.save();
         res.send('Question saved sucessfully');
     } catch (err) {
-        console.log(err);
-        res.status(500).send('Error occured while saving question')
+        const keyPatternObj = err.keyPattern;
+        if (keyPatternObj) {
+            const key = Object.keys(keyPatternObj)[0];
+            res.status(500).send(`${key} already presents`)
+        } else {
+            res.status(500).send('Error occured while saving question')
+        }
     }
 }
 
