@@ -1,8 +1,6 @@
-import { Box, Button, Stack, TextareaAutosize, TextField, Typography } from '@mui/material'
+import { Button, Stack, TextareaAutosize, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import MiniDrawer from '../../../components/Drawer/MiniDrawer'
 import MultipleSelect from '../../../components/Select/MultipleSelect';
-import DrawerHeader from '../../../components/DrawerHeader';
 import { levelSelect, subjectSelect } from '../../../helpers/constants';
 import axios from 'axios';
 import { questionValidationSchema } from '../../../utils/questionValidationSchema';
@@ -66,90 +64,81 @@ function AddQuestion() {
         setFieldValue('correctOption', options[correctOption]);
     }
     return (
-        <Box sx={{ display: 'flex' }}>
-            <MiniDrawer />
-            <Box component="main"
-                sx={{
-                    flexGrow: 1,
-                    p: { xs: 1, sm: 2, lg: 3 }
-                }}
+
+        <Stack spacing={1.5}>
+            <TextField
+                variant="outlined"
+                type="text"
+                label="Question"
+                id="question"
+                autoComplete="off"
+                value={values.question}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={errors.question && touched.question ? true : false}
+                helperText={errors.question && touched.question ? errors.question : null}
+            />
+            <OptionsDialog
+                open={optionsOpen}
+                onOpen={() => setOptionsOpen(true)}
+                onClose={handleOptionsContinue}
+                error={errors.correctOption ? true : false}
+                helperText={errors.correctOption}
+            />
+            <TextareaAutosize
+                minRows={5}
+                placeholder="Descriptions"
+                id="description"
+                value={values.description}
+                onChange={handleChange}
+                error={errors.description && touched.description ? true : false}
+                helperText={errors.description && touched.description ? errors.description : null}
+            />
+            <MultipleSelect
+                label="Select Levels"
+                menuItems={levelSelect}
+                id="levels"
+                value={values.levels}
+                onChange={handleLevelChange}
+            />
+            <MultipleSelect
+                label="Select Subjects"
+                menuItems={subjectSelect}
+                id="subjects"
+                value={values.subjects}
+                onChange={handleSubjectChange}
+            />
+            <TextField
+                variant="outlined"
+                type="text"
+                label="Keywords"
+                id="keywords"
+                autoComplete="off"
+                value={values.keywords}
+                onChange={handleChange}
+                error={errors.keywords && touched.keywords ? true : false}
+                helperText={errors.keywords && touched.keywords ? errors.keywords : null}
+            />
+            <TextField
+                variant="outlined"
+                type="text"
+                label="Slug"
+                id="slug"
+                autoComplete="off"
+                value={values.slug}
+                onChange={handleChange}
+                error={errors.slug && touched.slug ? true : false}
+                helperText={errors.slug && touched.slug ? errors.slug : null}
+            />
+            <Typography variant='body1'
+                sx={{ textAlign: 'center' }}
+                color={msg.type == 'err' ? 'red' : 'green'}
             >
-                <DrawerHeader />
-                <Stack spacing={1.5}>
-                    <TextField
-                        variant="outlined"
-                        type="text"
-                        label="Question"
-                        id="question"
-                        autoComplete="off"
-                        value={values.question}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        error={errors.question && touched.question ? true : false}
-                        helperText={errors.question && touched.question ? errors.question : null}
-                    />
-                    <OptionsDialog
-                        open={optionsOpen}
-                        onOpen={() => setOptionsOpen(true)}
-                        onClose={handleOptionsContinue}
-                        error={errors.correctOption ? true : false}
-                        helperText={errors.correctOption}
-                    />
-                    <TextareaAutosize
-                        minRows={5}
-                        placeholder="Descriptions"
-                        id="description"
-                        value={values.description}
-                        onChange={handleChange}
-                        error={errors.description && touched.description ? true : false}
-                        helperText={errors.description && touched.description ? errors.description : null}
-                    />
-                    <MultipleSelect
-                        label="Select Levels"
-                        menuItems={levelSelect}
-                        id="levels"
-                        value={values.levels}
-                        onChange={handleLevelChange}
-                    />
-                    <MultipleSelect
-                        label="Select Subjects"
-                        menuItems={subjectSelect}
-                        id="subjects"
-                        value={values.subjects}
-                        onChange={handleSubjectChange}
-                    />
-                    <TextField
-                        variant="outlined"
-                        type="text"
-                        label="Keywords"
-                        id="keywords"
-                        autoComplete="off"
-                        value={values.keywords}
-                        onChange={handleChange}
-                        error={errors.keywords && touched.keywords ? true : false}
-                        helperText={errors.keywords && touched.keywords ? errors.keywords : null}
-                    />
-                    <TextField
-                        variant="outlined"
-                        type="text"
-                        label="Slug"
-                        id="slug"
-                        autoComplete="off"
-                        value={values.slug}
-                        onChange={handleChange}
-                        error={errors.slug && touched.slug ? true : false}
-                        helperText={errors.slug && touched.slug ? errors.slug : null}
-                    />
-                    <Typography variant='body1'
-                        sx={{ textAlign: 'center' }}
-                        color={msg.type == 'err' ? 'red' : 'green'}
-                    >
-                        {msg.title}
-                    </Typography>
-                    <Button onClick={handleSubmit} fullWidth variant="contained">Submit</Button>
-                </Stack>
-            </Box>
-        </Box>
+                {msg.title}
+            </Typography>
+            <Button onClick={handleSubmit} fullWidth variant="contained">Submit</Button>
+        </Stack>
+
     )
 }
 

@@ -1,9 +1,7 @@
-import { Backdrop, Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
+import { Backdrop, Button, CircularProgress, Stack, Typography } from '@mui/material';
 import Link from 'next/link';
 import React, { useState } from 'react'
 import useSWR from 'swr';
-import MiniDrawer from '../../../components/Drawer/MiniDrawer';
-import DrawerHeader from '../../../components/DrawerHeader';
 import SimpleTable from '../../../components/Tables/SimpleTable';
 import fetchData from '../../../controllers/clientControllers/fetchData';
 import handleMutateData from '../../../controllers/clientControllers/handleMutateData';
@@ -73,40 +71,27 @@ function Questions() {
                     <Typography variant='h6'>Wait loding...</Typography>
                 </Stack>
             </Backdrop>
-
-            <Box sx={{ display: 'flex' }}>
-                <MiniDrawer />
-                <Box component="main"
-                    sx={{
-                        flexGrow: 1,
-                        px: { xs: 1, sm: 2, lg: 3 },
-                        py: 1
-                    }}
-                >
-                    <DrawerHeader />
-                    <Stack direction="row" spacing={0.5} sx={{ mb: 0.2 }}>
-                        <Link href="/dashboard/questions/add">
-                            <Button variant="contained" color="warning">Add Question</Button>
-                        </Link>
-                        <Button variant="contained" color="warning">Manage Question</Button>
-                    </Stack>
-                    <SimpleTable
-                        tableHeading={tableHeading}
-                        dataHeading={dataHeading}
-                        data={questions.data}
-                        page={page}
-                        rowsPerPage={rowsPerPage}
-                        totalCount={questions.totalCount}
-                        handleChangePage={handleChangePage}
-                        handleChangeRowsPerPage={handleChangeRowsPerPage}
-                        // ExtraCells={ }
-                        type="selectable"
-                        selected={selected}
-                        onSelectChange={handleSelectChange}
-                        onAllSelectChange={handleAllSelectChange}
-                    />
-                </Box>
-            </Box>
+            <Stack direction="row" spacing={0.5} sx={{ mb: 0.2 }}>
+                <Link href="/dashboard/questions/add">
+                    <Button variant="contained" color="warning">Add Question</Button>
+                </Link>
+                <Button variant="contained" color="warning">Manage Question</Button>
+            </Stack>
+            <SimpleTable
+                tableHeading={tableHeading}
+                dataHeading={dataHeading}
+                data={questions.data}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                totalCount={questions.totalCount}
+                handleChangePage={handleChangePage}
+                handleChangeRowsPerPage={handleChangeRowsPerPage}
+                // ExtraCells={ }
+                type="selectable"
+                selected={selected}
+                onSelectChange={handleSelectChange}
+                onAllSelectChange={handleAllSelectChange}
+            />
         </>
     )
 }
