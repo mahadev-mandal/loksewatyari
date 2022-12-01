@@ -14,13 +14,12 @@ function MyApp({ Component, pageProps }) {
         <Box component="main"
           sx={{
             flexGrow: 1,
-            p: { xs: 0, sm: 2, lg: 3 }
+            p: { xs: 0.8, sm: 2, lg: 3 },
+            width: '100vw'
           }}
         >
           <DrawerHeader />
-          <Box sx={{ width: '100vw' }}>
-            <Component {...pageProps} />
-          </Box>
+          <Component {...pageProps} />
         </Box>
       </Box>
     )

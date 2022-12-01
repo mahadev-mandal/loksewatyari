@@ -8,8 +8,8 @@ import SimpleList from "../../components/Lists";
 
 export default function Dashboard() {
   return (
-    <Grid container sx={{}}>
-      <Grid item xs={12} md={9} sx={{ px: 2 }}>
+    <Grid container>
+      <Grid item xs={12} md={9} sx={{ pr: 2 }}>
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <Stack

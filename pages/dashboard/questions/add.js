@@ -1,4 +1,4 @@
-import { Button, Stack, TextareaAutosize, TextField, Typography } from '@mui/material'
+import { Button, Stack, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import MultipleSelect from '../../../components/Select/MultipleSelect';
 import { levelSelect, subjectSelect } from '../../../helpers/constants';
@@ -7,6 +7,9 @@ import { questionValidationSchema } from '../../../utils/questionValidationSchem
 import { mutate } from 'swr';
 import { useFormik } from 'formik';
 import OptionsDialog from '../../../components/Dialogs/OptionsDialog';
+import dynamic from 'next/dynamic';
+const RichTextEditor = dynamic(() => import('../../../components/RichTextEditor'), { ssr: false });
+// const ReadTextQuill = dynamic(() => import('../../../components/RichTextEditor/ReadTextQuill'), { ssr: false });
 
 const initialValues = {
     question: '',
@@ -19,9 +22,11 @@ const initialValues = {
     slug: '',
 }
 
+
 function AddQuestion() {
     const [msg, setMsg] = useState('');
     const [optionsOpen, setOptionsOpen] = React.useState(false);
+    const [value, setValue] = useState('');
 
     const { handleSubmit, handleChange, handleBlur, touched, errors, values, setFieldValue } = useFormik({
         initialValues: initialValues,
@@ -63,6 +68,7 @@ function AddQuestion() {
         setFieldValue('options', Object.keys(options).map(key => options[key]));
         setFieldValue('correctOption', options[correctOption]);
     }
+    console.log(value)
     return (
 
         <Stack spacing={1.5}>
@@ -85,15 +91,8 @@ function AddQuestion() {
                 error={errors.correctOption ? true : false}
                 helperText={errors.correctOption}
             />
-            <TextareaAutosize
-                minRows={5}
-                placeholder="Descriptions"
-                id="description"
-                value={values.description}
-                onChange={handleChange}
-                error={errors.description && touched.description ? true : false}
-                helperText={errors.description && touched.description ? errors.description : null}
-            />
+            <RichTextEditor value={value} onChange={setValue} />
+            {/* <ReadTextQuill value={value} /> */}
             <MultipleSelect
                 label="Select Levels"
                 menuItems={levelSelect}

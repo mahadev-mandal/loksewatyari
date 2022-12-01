@@ -32,7 +32,6 @@ export default function OptionsDialog({ open, onClose, onOpen, helperText, error
                     multiple
                     label="Options"
                     error={error}
-                    helperText="mahadev"
                     renderValue={(selected) => (
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                             {selected.map((value) => (

@@ -45,7 +45,7 @@ const getUsers = async (req, res) => {
             .skip(parseInt(page) * parseInt(rowsPerPage))
             .limit(parseInt(rowsPerPage));
         const totalCount = await userModel.estimatedDocumentCount();
-        res.json({ users, totalCount });
+        res.json({ data: users, totalCount });
     } catch (err) {
         res.status(500).send('Error occured while getting users')
     }

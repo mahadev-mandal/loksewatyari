@@ -33,4 +33,4 @@ export const subjectSelect = [
     { value: 'grammar', title: 'Grammar' },
     { value: 'english', title: 'English' },
     { value: 'gk', title: 'GK' },
-]
+];
