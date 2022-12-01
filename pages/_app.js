@@ -18,7 +18,9 @@ function MyApp({ Component, pageProps }) {
           }}
         >
           <DrawerHeader />
-          <Component {...pageProps} />
+          <Box sx={{ width: '100vw' }}>
+            <Component {...pageProps} />
+          </Box>
         </Box>
       </Box>
     )
