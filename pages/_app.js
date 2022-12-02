@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }) {
         <Box component="main"
           sx={{
             flexGrow: 1,
-            p: { xs: 0.8, sm: 2, lg: 3 },
+            p: { xs: 1, sm: 2, lg: 3 },
             width: '100vw'
           }}
         >

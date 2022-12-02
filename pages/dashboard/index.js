@@ -9,7 +9,7 @@ import SimpleList from "../../components/Lists";
 export default function Dashboard() {
   return (
     <Grid container>
-      <Grid item xs={12} md={9} sx={{ pr: 2 }}>
+      <Grid item xs={12} md={9} sx={{ pr: { md: 2, xs: 0 } }}>
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <Stack

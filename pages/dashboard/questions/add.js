@@ -35,11 +35,10 @@ function AddQuestion() {
 
             await axios.post(`/api/dashboard/questions`, { ...values })
                 .then((r) => {
-                    console.log(r)
                     setMsg({ title: r.data, type: 'success' });
                     mutate(`/api/dashboard/questions`)
                 }).catch((err) => {
-                    setMsg({ title: err.response.data, type: 'err' })
+                    setMsg({ title: err.response.data, type: 'error' })
                 })
         }
     })
@@ -131,7 +130,7 @@ function AddQuestion() {
             />
             <Typography variant='body1'
                 sx={{ textAlign: 'center' }}
-                color={msg.type == 'err' ? 'red' : 'green'}
+                color={msg.type == 'error' ? 'red' : 'green'}
             >
                 {msg.title}
             </Typography>

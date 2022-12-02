@@ -19,15 +19,17 @@ const addUser = async (req, res) => {
         const user = new userModel({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
-            userId: 0,
+            userId: 1,
             mobile: req.body.mobile,
             email: req.body.email,
             role: req.body.role,
+            password:req.body.password,
             profilePicPath: req.body.profilePicPath
         });
-        user.save();
-        res.send('User saved');
+        await user.save();
+        res.send('User saved sucessfully');
     } catch (err) {
+        console.log(err)
         if (err.keyPattern) {
             if (err.keyPattern.email == 1) {
                 res.status(403).send('User already presents');

@@ -23,14 +23,14 @@ const employeeSchema = new mongoose.Schema({
         unique: true,
     },
     role: {          // 0:user,1:admin, 2:super admin
-        type: Number,
+        type: String,
         required: true,
         default: 0,
     },
     registeredDate: {
         type: Date,
         required: true,
-        defaul: Date.now()
+        default: Date.now()
     },
     password: {
         type: String,
@@ -83,4 +83,4 @@ employeeSchema.methods.generateAuthToken = async function (req, res) {
     }
 }
 
-export default mongoose.models.employees || mongoose.model('employees', employeeSchema);
+export default mongoose.models.user || mongoose.model('user', employeeSchema);

@@ -44,7 +44,7 @@ export default function OptionsDialog({ open, onClose, onOpen, helperText, error
                     )}
                     fullWidth>
                 </Select>
-                <FormHelperText error={error} id="country-helper" disabled >
+                <FormHelperText error={error} id="options-helper" disabled >
                     {helperText}
                 </FormHelperText>
             </FormControl>

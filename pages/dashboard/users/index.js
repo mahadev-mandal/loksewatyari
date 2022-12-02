@@ -1,4 +1,5 @@
-import { Backdrop, CircularProgress, Stack, Typography } from '@mui/material';
+import { Backdrop, Button, CircularProgress, Stack, Typography } from '@mui/material';
+import Link from 'next/link';
 import React, { useState } from 'react'
 import useSWR from 'swr';
 import SimpleTable from '../../../components/Tables/SimpleTable'
@@ -69,6 +70,12 @@ function Users() {
           <Typography variant='h6'>Wait loding...</Typography>
         </Stack>
       </Backdrop>
+      <Stack direction="row" spacing={0.5} sx={{ mb: 0.2 }}>
+        <Link href="/dashboard/users/add">
+          <Button variant="contained" color="warning">Add user</Button>
+        </Link>
+        <Button variant="contained" color="warning">Manage user</Button>
+      </Stack>
       <SimpleTable
         tableHeading={tableHeading}
         dataHeading={dataHeading}

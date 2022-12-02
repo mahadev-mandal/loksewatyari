@@ -34,3 +34,5 @@ export const subjectSelect = [
     { value: 'english', title: 'English' },
     { value: 'gk', title: 'GK' },
 ];
+
+export const headerPadding = '0 20px';
